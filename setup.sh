@@ -1,6 +1,6 @@
 #!/bin/sh
 dir="$HOME/Dropbox/dotfiles"
-dotfiles=".emacs.d .ssh .gitconfig .zshrc"
+dotfiles=".emacs.d .ssh .gitconfig .zshrc .tmux.conf"
 
 for file in $dotfiles; do
   echo Creating link to $dir/$file at $HOME/$file
