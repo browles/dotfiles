@@ -1,0 +1,19 @@
+[user]
+	name = browles
+	email = rowlesben@gmail.com
+[core]
+	autocrlf = input
+	safecrlf = true
+	editor = subl
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
