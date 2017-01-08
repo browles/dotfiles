@@ -56,6 +56,9 @@
       (zenburn-bg "#3f3f3f")
       (zenburn-bg+1 "#4f4f4f")
       (zenburn-bg+2 "#5f5f5f")
+      ; (zenburn-bg "#0f0f0f")
+      ; (zenburn-bg+1 "#1f1f1f")
+      ; (zenburn-bg+2 "#2f2f2f")
       (zenburn-red+1 "#dca3a3")
       (zenburn-red "#cc9393")
       (zenburn-red-1 "#bc8383")
@@ -456,7 +459,7 @@
    `(wl-highlight-thread-indent-face ((,class (:foreground ,zenburn-magenta))))
    `(wl-highlight-summary-refiled-face ((,class (:foreground ,zenburn-fg))))
    `(wl-highlight-summary-displaying-face ((,class (:underline t :weight bold))))
-   
+
    ;; which-func-mode
    `(which-func ((,class (:foreground ,zenburn-green+1))))))
 
