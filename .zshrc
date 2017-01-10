@@ -4,6 +4,8 @@ ZSH_THEME="daveverwer"
 
 plugins=(git autojump emacs osx)
 
+alias emacs-kill="emacsclient -e \"(kill-emacs)\""
+
 export GOPATH="$HOME/go"
 export PATH="$PATH:~/.rvm/bin"
 export PATH="$PATH:~/Library/Haskell/bin"
