@@ -4,7 +4,7 @@
 [core]
 	autocrlf = input
 	safecrlf = true
-	editor = subl
+	editor = /usr/local/bin/emacs
 [alias]
 	co = checkout
 	ci = commit
