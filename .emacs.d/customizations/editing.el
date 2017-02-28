@@ -24,9 +24,14 @@
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "C-M-<mouse-1>") 'mc/add-cursor-on-click)
+(global-set-key (kbd "C-z") 'mc/mark-next-like-this)
+(global-set-key (kbd "M-z") 'er/expand-region)
+(global-set-key (kbd "C-M-z") 'mc/edit-lines)
 
 ;; Don't use hard tabs
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
 
 ;; When you visit a file, point goes to the last place where it
 ;; was when you previously visited the same file.
@@ -72,4 +77,3 @@
 (setq electric-indent-mode -1)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
