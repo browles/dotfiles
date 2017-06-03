@@ -3,10 +3,29 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        electric-newline-and-maybe-indent
+        kill-region
+        paredit-backslash
+        paredit-forward
+        paredit-forward-barf-sexp
+        paredit-forward-delete
+        paredit-forward-kill-word
+        paredit-forward-slurp-sexp
         paredit-kill
+        paredit-open-round
+        smex
+        yaml-electric-backspace
+        yaml-electric-dash-and-dot
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        cider-load-buffer
+        coffee-dedent-line-backspace
+        ido-find-file
+        indent-for-tab-command
+        kill-sentence
+        mark-whole-buffer
         mouse-drag-secondary
+        mouse-set-region
         ))

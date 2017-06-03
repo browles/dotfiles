@@ -1,6 +1,6 @@
 #!/bin/sh
 dir="$HOME/Dropbox/dotfiles"
-dotfiles=".emacs.d .gitconfig .zshrc .tmux.conf"
+dotfiles=".emacs.d .gitconfig .zshrc .tmux.conf .spacemacs"
 
 for file in $dotfiles; do
   if [ -a $HOME/$file ]; then
