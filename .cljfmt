@@ -1,0 +1,19 @@
+; This is a configuration file for cljfmt.
+; See https://github.com/cespare/goclj.
+; You can use this file by symlinking it as ~/.cljfmt.
+{:indent-overrides [["GET" "POST" "PUT" "PATCH" "DELETE" "context"] :list-body ; compojure
+                    "set-attr" :cond0 ; enlive
+                    "clone-for" :cond1 ; enlive
+                    "defsnippet" :cond4 ; enlive
+                    ["select" "insert" "update" "delete" "with" "logged-insert"
+                     "logged-update" "logged-upsert" "upsert"] :list-body ; korma
+                    "go-loop" :let ; core.async
+                    ["construct" "construct-partial"] :cond1 ; shared-lib
+                    "are" :list-body ; clojure.test
+                    ["cache-get" "time"] :list-body ; workbench
+                    "stubbing" :let ; shared-lib.testing.helpers
+                    "defrecord+" :deftype ; shared-lib.core
+                    "assoc-when" :cond1 ; plumbing.core
+                    ]
+ :thread-first-overrides ["-?>" :normal ; our shared-lib.core alias for some->
+                          ]}
