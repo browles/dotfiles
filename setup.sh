@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="$HOME/Dropbox/config"
+dir=`pwd`
 dotfiles=".gitconfig .hammerspoon .vim .vimrc .zshrc .tmux.conf .spacemacs .cljfmt"
 
 for file in $dotfiles; do
