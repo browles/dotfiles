@@ -12,6 +12,7 @@ hs.crash.crashLogToNSLog = true
 
 window.animationDuration = 0
 
+local ctrlAlt = {"ctrl", "alt"}
 local mash      = {"ctrl", "cmd"}
 local mashAlt   = {"ctrl", "cmd", "alt"}
 local mashShift = {"ctrl", "cmd", "shift"}
@@ -76,12 +77,16 @@ function gridToFrame(screen, grid)
 end
 
 local movements = {
-   {mod=mashShift, key="Left", fn=gridset(goleft)},
-   {mod=mashShift, key="Up", fn=gridset(gotop)},
-   {mod=mashShift, key="Down", fn=gridset(gobottom)},
-   {mod=mashShift, key="Right", fn=gridset(goright)},
-   {mod=mashShift, key="Space", fn=gridset(gocenter)},
-   {mod=mashShift, key="M", fn=grid.maximizeWindow}
+   {mod=ctrlAlt, key="H", fn=gridset(goleft)},
+   {mod=ctrlAlt, key="K", fn=gridset(gotop)},
+   {mod=ctrlAlt, key="J", fn=gridset(gobottom)},
+   {mod=ctrlAlt, key="L", fn=gridset(goright)},
+   {mod=ctrlAlt, key="Y", fn=gridset(gotopleft)},
+   {mod=ctrlAlt, key="U", fn=gridset(gotopright)},
+   {mod=ctrlAlt, key="B", fn=gridset(godownleft)},
+   {mod=ctrlAlt, key="N", fn=gridset(godownright)},
+   {mod=ctrlAlt, key="Space", fn=gridset(gocenter)},
+   {mod=ctrlAlt, key="M", fn=grid.maximizeWindow}
 }
 
 fnutils.each(movements, function(m)
