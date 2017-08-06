@@ -162,5 +162,6 @@ you save any file, kind of defeating the point of autoloading."
 
   (interactive)
   (when (or (eq major-mode 'clojure-mode)
+            (eq major-mode 'clojurec-mode)
             (eq major-mode 'clojurescript-mode))
     (cljfmt)))

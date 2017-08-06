@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dir=`pwd`
-dotfiles=".gitconfig .hammerspoon .vim .vimrc .zshrc .tmux.conf .spacemacs .cljfmt"
+dotfiles=".gitconfig .hammerspoon .vim .vimrc .zshrc .tmux.conf .spacemacs .cljfmt .lein"
 
 for file in $dotfiles; do
   if [ -a $HOME/$file ]; then
