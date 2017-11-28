@@ -92,3 +92,68 @@ local movements = {
 fnutils.each(movements, function(m)
   hotkey.bind(m.mod, m.key, m.fn)
 end)
+
+-- App control
+hs.hotkey.bind(mash, 'T', function() hs.application.launchOrFocus('/Applications/iTerm.app') end)
+
+-- Layout
+local centerScreen = hs.screen{x=0,y=0}
+local rightScreen = hs.screen{x=1,y=0}
+local leftScreen = hs.screen{x=-1,y=0}
+
+local workLayout = {
+  {"Google Chrome", nil, leftScreen, hs.layout.left50, nil, nil},
+  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
+  {"iTerm2", nil, leftScreen, hs.layout.right50, nil, nil},
+  {"Slack", nil, rightScreen, hs.layout.maximized, nil, nil},
+  {"Spotify", nil, rightScreen, hs.layout.maximized, nil, nil},
+}
+
+local laptopLayout = {
+  {"Google Chrome", nil, centerScreen, hs.layout.maximized, nil, nil},
+  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
+  {"iTerm2", nil, centerScreen, hs.layout.right50, nil, nil},
+  {"Slack", nil, centerScreen, hs.layout.maximized, nil, nil},
+  {"Spotify", nil, centerScreen, hs.layout.maximized, nil, nil},
+}
+
+local homeLayout = {
+  {"Google Chrome", nil, centerScreen, hs.layout.left50, nil, nil},
+  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
+  {"iTerm2", nil, centerScreen, hs.layout.right50, nil, nil},
+  {"Slack", nil, rightScreen, hs.layout.maximized, nil, nil},
+  {"Spotify", nil, rightScreen, hs.layout.maximized, nil, nil},
+}
+
+-- Screen watcher
+local lastNumberOfScreens = #hs.screen.allScreens()
+
+function switchLayout()
+  local numScreens = #hs.screen.allScreens()
+  local layout = {}
+
+  if numScreens == 1 then
+    layout = laptopLayout
+    layoutName = "Laptop layout"
+  elseif numScreens == 2 then
+    layout = homeLayout
+    layoutName = "Home layout"
+  elseif numScreens == 3 then
+    layout = workLayout
+    layoutName = "Work layout"
+  end
+  hs.layout.apply(layout)
+  hs.alert.show(layoutName)
+end
+
+function onScreensChanged()
+  numScreens = #hs.screen.allScreens()
+  if lastNumberOfScreens ~= numScreens then
+    switchLayout()
+    lastNumberOfScreens = numScreens
+  end
+end
+
+local screenWatcher = hs.screen.watcher.new(onScreensChanged):start()
+
+hs.hotkey.bind(mash, "r", function() switchLayout() end)
