@@ -32,6 +32,7 @@ values."
    dotspacemacs-configuration-layers
    '(
      csv
+     csv
      lua
      nginx
      vimscript
@@ -334,12 +335,12 @@ you should place your code here."
   (add-hook 'before-save-hook 'cljfmt-before-save)
   (add-hook 'go-mode-hook (lambda () (setq fill-column 80)))
   (advice-add 'js--multi-line-declaration-indentation :around (lambda (orig-fun &rest args) nil))
-  (setq debug-on-error t)
   (setq-default
    create-lockfiles nil
    cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))"
    coffee-tab-width 2
    css-indent-offset 2
+   ;; debug-on-error t
    evil-want-Y-yank-to-eol nil
    fill-column 110
    frame-resize-pixelwise t
@@ -351,11 +352,12 @@ you should place your code here."
    js2-strict-inconsistent-return-warning nil
    js2-strict-trailing-comma-warning nil
    ns-command-modifier (quote meta)
-   org-journal-dir "~/Dropbox/journal/"
+   org-journal-dir "~/Dropbox/org/journal/"
    org-journal-find-file 'find-file
    org-journal-carryover-items nil
-   org-agenda-files '("~/Dropbox/journal/")
+   org-agenda-files '("~/Dropbox/org/" "~/Dropbox/org/journal" )
    org-agenda-file-regexp "\\`[^.].*\\.org\\'\\|\\`[0-9]+\\'"
+   projectile-enable-caching t
    show-paren-mode t
    standard-indent 2
    tab-width 2
