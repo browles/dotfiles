@@ -1,6 +1,6 @@
 ZSH_THEME="daveverwer"
 
-plugins=(git autojump osx)
+plugins=(autojump osx)
 alias emacs-kill="emacsclient -e \"(kill-emacs)\""
 alias ec="emacsclient --c --no-wait"
 alias octave=octave-cli
