@@ -2,7 +2,7 @@ ZSH_THEME="daveverwer"
 
 plugins=(autojump osx)
 alias emacs-kill="emacsclient -e \"(kill-emacs)\""
-alias ec="emacsclient --c --no-wait"
+alias ec="emacsclient --no-wait"
 alias octave=octave-cli
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias ag="ag --path-to-ignore ~/.ignore"
