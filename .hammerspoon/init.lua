@@ -118,9 +118,9 @@ local laptopLayout = {
 }
 
 local homeLayout = {
-  {"Google Chrome", nil, centerScreen, hs.layout.left50, nil, nil},
-  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
-  {"iTerm2", nil, centerScreen, hs.layout.right50, nil, nil},
+  {"Google Chrome", nil, leftScreen, hs.layout.left50, nil, nil},
+  {"Emacs", nil, leftScreen, hs.layout.maximized, nil, nil},
+  {"iTerm2", nil, leftScreen, hs.layout.right50, nil, nil},
   {"Slack", nil, rightScreen, hs.layout.maximized, nil, nil},
   {"Spotify", nil, rightScreen, hs.layout.maximized, nil, nil},
 }

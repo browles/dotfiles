@@ -47,6 +47,7 @@ values."
      html
      java
      javascript
+     latex
      lua
      markdown
      nginx
@@ -54,6 +55,7 @@ values."
      osx
      org
      python
+     ranger
      ruby
      rust
      scala
@@ -156,7 +158,7 @@ values."
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font (list
 	     "Source Code Pro"
-	     :size  (if (memq window-system '(mac ns x)) 12 14)
+	     :size  (if (string-equal system-type "darwin") 12 14)
 	     :weight 'semibold
 	     :width 'normal)
    ;; The leader key
@@ -200,7 +202,7 @@ values."
    dotspacemacs-display-default-layout nil
    ;; If non nil then the last auto saved layouts are resume automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
    ;; no major mode or minor modes are active. (default is 1)
@@ -346,6 +348,9 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (sync-env)
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
 
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ne" 'nodejs-repl-send-last-expression)
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nj" 'nodejs-repl-send-line)
@@ -364,6 +369,8 @@ you should place your code here."
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook (lambda () (setq fill-column 80)))
   (add-hook 'java-mode-hook (lambda () (setq c-basic-offset 2)))
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  (advice-add 'org-archive-subtree :after 'org-save-all-org-buffers)
 
   (scroll-bar-mode -1)
 
@@ -389,6 +396,16 @@ you should place your code here."
   (setq-default nrepl-use-ssh-fallback-for-remote-hosts t)
 
   (setq-default
+   TeX-source-correlate-mode t
+   TeX-source-correlate-start-server nil
+   TeX-source-correlate-method 'synctex
+   TeX-view-program-selection (if (string-equal system-type "darwin")
+                                  '((output-pdf "Skim"))
+                                  '((output-pdf "Okular")))
+   TeX-view-program-list '(("Skim" "displayline -b -g %n %o %b")
+                           ("Okular" "okular --unique %o#src:%n`pwd`/./%b")))
+
+  (setq-default
    create-lockfiles nil
    evil-want-Y-yank-to-eol nil
    fill-column 110
@@ -403,8 +420,7 @@ you should place your code here."
          (gtd (concat org "/gtd.org"))
          (reminder (concat org "/reminder.org"))
          (archive (concat org "/archive.org::date-tree"))
-         (notes (concat org "/notes.org"))
-         (journal (concat org "/journal.org")))
+         (notes (concat org "/notes.org")))
     (setq-default
      org-journal-find-file 'find-file
      org-journal-carryover-items nil
@@ -414,18 +430,18 @@ you should place your code here."
      org-journal-dir (concat org "/journal")
      org-default-notes-file notes
      org-archive-location archive
-     org-agenda-file-regexp "\\`[^.].*\\.org\\'\\|\\`[0-9]+\\'"
+     org-agenda-files `(,inbox ,gtd ,reminder)
      org-capture-templates `(("t" "Todo [inbox]" entry
                               (file+headline ,inbox "Inbox")
                               "* TODO %?%i")
                              ("p" "Project [gtd]" entry
                               (file ,gtd)
                               "* %? [/]")
-                             ("j" "Journal" entry
-                              (file+olp+datetree ,journal)
+                             ("n" "Note [notes]" entry
+                              (file+headline ,notes "Notes")
                               "* %?\n %i\n"
                               ))
-     org-refile-targets `((,gtd :level . 1) )
+     org-refile-targets `((,gtd :level . 1) (,reminder :level . 1))
      org-todo-keywords `((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
   (setq-default
@@ -454,7 +470,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (reveal-in-osx-finder pbcopy osx-trash osx-dictionary launchctl zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode ws-butler winum white-sand-theme which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toml-mode toc-org tide tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection sql-indent spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode seti-theme scss-mode sayid sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe rjsx-mode reverse-theme restart-emacs rebecca-theme rbenv rake rainbow-delimiters railscasts-theme racer pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode protobuf-mode professional-theme popwin planet-theme pippel pipenv pip-requirements phpunit phpcbf php-extras php-auto-yasnippets phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode password-generator paradox overseer orgit organic-green-theme org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noflet nodejs-repl noctilux-theme nginx-mode neotree naquadah-theme nameless mvn mustang-theme move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minitest minimal-theme meghanada maven-test-mode material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode linum-relative link-hint light-soap-theme less-css-mode kaolin-themes json-navigator json-mode js2-refactor js-doc jinja2-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme groovy-mode groovy-imports grandshell-theme gradle-mode gotham-theme google-translate golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy font-lock+ flycheck-rust flycheck-pyflakes flycheck-pos-tip flx-ido flatui-theme flatland-theme fill-column-indicator farmhouse-theme fancy-battery eziam-theme eyebrowse expand-region exotica-theme exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu espresso-theme ensime emmet-mode elisp-slime-nav editorconfig dumb-jump drupal-mode dracula-theme doom-themes django-theme diminish define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme dactyl-mode cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-php company-lua company-go company-emacs-eclim company-ansible company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clojure-snippets clojure-cheatsheet clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby cherry-blossom-theme centered-cursor-mode cargo busybee-theme bundler bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anti-zenburn-theme ansible-doc ansible ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (writeroom-mode visual-fill-column treemacs-projectile treemacs-evil treemacs ht pfuture seeing-is-believing rjsx-mode ranger prettier-js magit-svn transient git-commit async with-editor dash lv kaolin-themes json-navigator hierarchy helm-org-rifle helm-git-grep go-impl go-gen-test go-fill-struct gitignore-templates eziam-theme evil-goggles doom-themes doom-modeline eldoc-eval shrink-path dotenv-mode zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode ws-butler winum white-sand-theme which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toml-mode toc-org tide tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection sql-indent spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode seti-theme scss-mode sayid sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe reverse-theme reveal-in-osx-finder restart-emacs rebecca-theme rbenv rake rainbow-delimiters railscasts-theme racer pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode protobuf-mode professional-theme popwin planet-theme pippel pipenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pbcopy password-generator paradox overseer osx-trash osx-dictionary orgit organic-green-theme org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noflet nodejs-repl noctilux-theme nginx-mode neotree naquadah-theme nameless mvn mustang-theme move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minitest minimal-theme meghanada maven-test-mode material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode linum-relative link-hint light-soap-theme less-css-mode launchctl json-mode js2-refactor js-doc jinja2-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide importmagic impatient-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme groovy-mode groovy-imports grandshell-theme gradle-mode gotham-theme google-translate golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy font-lock+ flycheck-rust flycheck-pyflakes flycheck-pos-tip flx-ido flatui-theme flatland-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exotica-theme exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu espresso-theme ensime emmet-mode elisp-slime-nav editorconfig dumb-jump dracula-theme django-theme diminish darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme dactyl-mode cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-go company-emacs-eclim company-auctex company-ansible company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode clues-theme clojure-snippets clojure-cheatsheet clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby cherry-blossom-theme centered-cursor-mode cargo busybee-theme bundler bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anti-zenburn-theme ansible-doc ansible ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

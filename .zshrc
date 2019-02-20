@@ -11,3 +11,8 @@ type google-chrome &>/dev/null && alias chrome=google-chrome
 source $ZSH/oh-my-zsh.sh
 
 eval "$(rbenv init -)"
+
+if [ -f $HOME/.liftoff_profile ]; then
+  source $HOME/.liftoff_profile
+  export PATH="$PATH:/anaconda3/bin"
+fi
