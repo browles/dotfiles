@@ -2,7 +2,7 @@
 	name = browles
 	email = rowlesben@gmail.com
 [core]
-	autocrlf = input
+	autocrlf = false
 	safecrlf = true
 	editor = emacsclient
 [alias]
