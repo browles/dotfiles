@@ -2,7 +2,7 @@
 
 dir=`pwd`
 dotfiles=".gitconfig .ignore .hammerspoon .vim .vimrc \
-	.zshrc .tmux.conf.local .spacemacs .cljfmt .lein/profiles.clj"
+	.zshrc .zshenv .tmux.conf.local .spacemacs .cljfmt .lein/profiles.clj"
 
 for file in $dotfiles; do
   if [ -a $HOME/$file ]; then
