@@ -2,6 +2,7 @@
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'xolox/vim-misc'
 Plug 'SirVer/ultisnips'
 Plug 'airblade/vim-gitgutter'
 Plug 'browles/vim-sublime-monokai'
@@ -22,6 +23,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'tpope/vim-surround'
+Plug 'xolox/vim-notes'
 
 call plug#end()
 
@@ -68,7 +70,7 @@ set wildmenu                    " command tab completion menu
 set wildmode=list:longest,full  " command tab completion menu options
 
 let g:netrw_banner = 0
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 2
 let g:netrw_liststyle = 3
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
@@ -83,6 +85,9 @@ let g:lightline = {
       \   'gitbranch': 'FugitiveHead'
       \ },
       \ }
+
+let g:notes_directories = ['~/Dropbox/notes']
+let g:notes_smart_quotes = 0
 
 " Viminfo saves/restores editing metadata in ~/.viminfo.
 " '100   Save marks for the last 100 edited files
@@ -171,7 +176,7 @@ augroup restore_cursor
 augroup end
 
 " -- Go --
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = 'goimports'
 let g:go_highlight_format_strings = 1
 let g:go_highlight_function_arguments = 1
 let g:go_highlight_function_calls = 1
@@ -195,7 +200,7 @@ augroup END
 " -- Clojure --
 let g:cljfmt_on_save = 0
 let g:clojure_syntax_keywords = {
-      \ 'clojureMacro': ["def-", "-?>", "-?>>"],
+      \ 'clojureMacro': ['def-', '-?>', '-?>>'],
       \ }
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 
@@ -224,6 +229,11 @@ augroup END
 let java_comment_strings=1
 let java_highlight_functions=1
 let java_highlight_java_lang_ids=1
+
+augroup java
+  autocmd!
+  autocmd FileType java set cino:=(0
+augroup END
 
 " ----------- Misc -------------
 
