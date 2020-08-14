@@ -25,5 +25,3 @@ if [ -f $HOME/.liftoff_profile ]; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home
   source $HOME/.liftoff_profile
 fi
-
-export PATH="$PATH:/anaconda3/bin"
