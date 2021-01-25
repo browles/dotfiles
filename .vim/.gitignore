@@ -1,3 +1,5 @@
 autoload
 black
 plugged
+.netrwhist
+.netrwbook
