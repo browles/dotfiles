@@ -1,7 +1,6 @@
 ZSH_THEME="daveverwer"
 
 plugins=(autojump osx)
-export PATH="/usr/local/opt/postgresql@11/bin:$PATH"
 alias emacs-kill="emacsclient -e \"(kill-emacs)\""
 alias ec="emacsclient --no-wait"
 alias octave=octave-cli
@@ -13,10 +12,9 @@ alias python=python3
 alias pip=pip3
 
 source $ZSH/oh-my-zsh.sh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.zshenv
 
 eval "$(rbenv init -)"
+eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source ~/.zshenv

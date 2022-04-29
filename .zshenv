@@ -21,7 +21,8 @@ if [ -f $HOME/.liftoff_profile ]; then
   export HIVE_HOME=$HOME/hive
   export HADOOP_LIBEXEC_DIR=$HADOOP_HOME/libexec
   export JAVA8_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-  export JAVA11_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home
+  export JAVA11_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+  export PATH=$JAVA_HOME/bin:$PATH
   source $HOME/.liftoff_profile
 fi

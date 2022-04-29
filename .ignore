@@ -1,3 +1,7 @@
 node_modules/
 vendor/
 *.log
+*.json
+*.ipynb
+*.b64
+*pb2.py

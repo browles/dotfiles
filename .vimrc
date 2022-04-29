@@ -16,6 +16,8 @@ Plug 'dense-analysis/ale'
 Plug 'dmac/vim-cljfmt'
 Plug 'fatih/vim-go'
 Plug 'guns/vim-clojure-highlight'
+Plug 'integralist/vim-mypy'
+Plug 'nvie/vim-flake8'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -53,6 +55,8 @@ set formatoptions=croql
 set hidden                      " allows buffers to be put in bg without saving and allows undo when put in fg
 set history=1000
 set ignorecase                  " ignore case when searching...
+set smartcase                   " infer case sensitivity from search
+set wildignorecase
 set incsearch                   " perform search as you type
 set laststatus=2                " show statusline with filename
 set modeline                    " enable modelines
@@ -75,11 +79,29 @@ set textwidth=80                " wrap comments
 set wildmenu                    " command tab completion menu
 set wildmode=list:longest,full  " command tab completion menu options
 
+" Improvement to autochdir
+" https://vim.fandom.com/wiki/Set_working_directory_to_the_current_file
+let s:default_path = escape(&path, '\ ') " store default value of 'path'
+
+" Always add the current file's directory to the path and tags list if not
+" already there. Add it to the beginning to speed up searches.
+autocmd BufRead *
+      \ let s:tempPath=escape(escape(expand("%:p:h"), ' '), '\ ') |
+      \ exec "set path-=".s:tempPath |
+      \ exec "set path-=".s:default_path |
+      \ exec "set path^=".s:tempPath |
+      \ exec "set path^=".s:default_path
+
 let g:netrw_banner = 0
-let g:netrw_browse_split = 2
+let g:netrw_browse_split = 4
 let g:netrw_liststyle = 3
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
+
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :Vexplore
+" augroup END
 
 let g:lightline = {
       \ 'colorscheme': 'default',
@@ -206,8 +228,8 @@ augroup END
 " -- Clojure --
 let g:cljfmt_on_save = 0
 let g:clojure_syntax_keywords = {
-      \ 'clojureMacro': ['def-', '-?>', '-?>>'],
-      \ }
+                  \ 'clojureMacro': ['def-', '-?>', '-?>>'],
+                  \ }
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 
 hi link clojureKeyword Special
@@ -221,6 +243,12 @@ augroup END
 
 " -- Python --
 
+let g:black_virtualenv = $HOME . "/.venv/liftoff-tools-3.7.5"
+let g:ale_fixers = {
+                  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+                  \ 'python': ['black', 'isort'],
+                  \ }
+let g:ale_fix_on_save = 1
 hi link pythonImport SublimePink
 
 augroup python
@@ -228,7 +256,6 @@ augroup python
   autocmd FileType python setlocal tabstop=4
   autocmd FileType python setlocal softtabstop=4
   autocmd FileType python setlocal shiftwidth=4
-	autocmd BufWritePre *.py execute ':Black'
 augroup END
 
 " -- Java --
