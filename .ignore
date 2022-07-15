@@ -5,3 +5,4 @@ vendor/
 *.ipynb
 *.b64
 *pb2.py
+yarn.lock

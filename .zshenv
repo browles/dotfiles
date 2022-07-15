@@ -13,8 +13,9 @@ export PATH="$PATH:/usr/local/bin"
 export FONTCONFIG_PATH="/opt/X11/lib/X11/fontconfig"
 export FZF_DEFAULT_COMMAND="ag -g ''"
 export FZF_CTRL_T_COMMAND="ag -g ''"
+export REPOS=~/src
 
-if [ -f $HOME/.liftoff_profile ]; then
+if [ -f $REPOS/liftoff/ops/credentials/developer.profile ]; then
   export LIFTOFF="true"
   export PRESTO_HOME=$HOME/presto
   export HADOOP_HOME=$HOME/hadoop
@@ -24,5 +25,5 @@ if [ -f $HOME/.liftoff_profile ]; then
   export JAVA11_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
   export PATH=$JAVA_HOME/bin:$PATH
-  source $HOME/.liftoff_profile
+  source $REPOS/liftoff/ops/credentials/developer.profile
 fi

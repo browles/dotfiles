@@ -1,0 +1,23 @@
+[core]
+  autocrlf = false
+  safecrlf = true
+  editor = vim
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+[filter "media"]
+  clean = git media clean %f
+  smudge = git media smudge %f
+  required = true
+[push]
+  default = current
+[pull]
+  default = current
+  rebase = true
+[branch]
+  autosetuprebase = always

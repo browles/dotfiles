@@ -23,6 +23,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'psf/black', {'branch': 'stable'}
+Plug 'sbdchd/neoformat'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
@@ -32,6 +33,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'tpope/vim-surround'
 Plug 'xolox/vim-notes'
+Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 
 call plug#end()
 
@@ -127,6 +129,14 @@ let g:notes_smart_quotes = 0
 set viminfo='100,f1,<500,:100,/100,h
 
 " ---------- Mappings ----------
+inoremap <F5> <esc>:put =strftime('%Y-%m-%d')<CR>i
+
+" Use space as leader
+nnoremap <SPACE> <Nop>
+let mapleader = " "
+
+nnoremap <leader>f :FZF<CR>
+nnoremap <leader>g :Ag<space>
 
 " Make Y behave like C and D (yank to end of line).
 nnoremap Y y$
@@ -204,7 +214,8 @@ augroup restore_cursor
 augroup end
 
 " -- Go --
-let g:go_fmt_command = 'goimports'
+let g:go_fmt_command = 'gopls'
+let g:go_gopls_gofumpt = 1
 let g:go_highlight_format_strings = 1
 let g:go_highlight_function_arguments = 1
 let g:go_highlight_function_calls = 1
@@ -214,8 +225,8 @@ let g:go_highlight_types = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_generate_tags = 1
-let g:go_highlight_variable_assignments = 0
-let g:go_highlight_variable_declarations = 0
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
 
 augroup go
   autocmd!
@@ -223,6 +234,8 @@ augroup go
   autocmd FileType go setlocal tabstop=2
   autocmd FileType go setlocal softtabstop=2
   autocmd FileType go setlocal shiftwidth=2
+  autocmd FileType go nnoremap <buffer> gr :GoReferrers<CR>:lopen<CR>
+  autocmd FileType go nnoremap <buffer> gc :GoCallers<CR>:lopen<CR>
 augroup END
 
 " -- Clojure --
@@ -247,6 +260,8 @@ let g:black_virtualenv = $HOME . "/.venv/liftoff-tools-3.7.5"
 let g:ale_fixers = {
                   \ '*': ['remove_trailing_lines', 'trim_whitespace'],
                   \ 'python': ['black', 'isort'],
+                  \ 'javascript': ['prettier'],
+                  \ 'css': ['prettier'],
                   \ }
 let g:ale_fix_on_save = 1
 hi link pythonImport SublimePink
@@ -268,6 +283,19 @@ augroup java
   autocmd FileType java set cino:=(0
 augroup END
 
+" -- JavaScript --
+augroup javascript
+  autocmd!
+  autocmd FileType javascript setlocal tabstop=2
+  autocmd FileType javascript setlocal softtabstop=2
+  autocmd FileType javascript setlocal shiftwidth=2
+augroup END
+
+let g:vim_jsx_pretty_colorful_config = 1
+
+" -- Bash --
+let g:shfmt_fmt_on_save = 1
+
 " ----------- Misc -------------
 
 function! SynGroup()
@@ -282,6 +310,5 @@ if $LIFTOFF == 'true'
 	" Ensure we use our versioned goimports wrapper from tools/bin rather than
 	" whatever version of goimports vim-go installs.
 	let g:go_search_bin_path_first = 0
-	let g:go_fmt_options = {'goimports': '-local liftoff/'}
 	let g:cljfmt_on_save = 1
 endif
