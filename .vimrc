@@ -255,8 +255,6 @@ augroup clojure
 augroup END
 
 " -- Python --
-
-let g:black_virtualenv = $HOME . "/.venv/liftoff-tools-3.7.5"
 let g:ale_fixers = {
                   \ '*': ['remove_trailing_lines', 'trim_whitespace'],
                   \ 'python': ['black', 'isort'],
@@ -303,12 +301,3 @@ let l:s = synID(line('.'), col('.'), 1)
 echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
 map <F10> :call SynGroup()<CR>
-
-" ---------- Liftoff -----------
-
-if $LIFTOFF == 'true'
-	" Ensure we use our versioned goimports wrapper from tools/bin rather than
-	" whatever version of goimports vim-go installs.
-	let g:go_search_bin_path_first = 0
-	let g:cljfmt_on_save = 1
-endif
