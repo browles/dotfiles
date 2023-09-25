@@ -12,11 +12,11 @@ hs.crash.crashLogToNSLog = true
 
 window.animationDuration = 0
 
-local ctrlAlt = {"ctrl", "alt"}
-local mash      = {"ctrl", "cmd"}
-local mashAlt   = {"ctrl", "cmd", "alt"}
-local mashShift = {"ctrl", "cmd", "shift"}
-local mashAll   = {"ctrl", "cmd", "alt", "shift"}
+local ctrlAlt      = {"ctrl", "alt"}
+local ctrlCmd      = {"ctrl", "cmd"}
+local ctrlCmdAlt   = {"ctrl", "cmd", "alt"}
+local ctrlCmdShift = {"ctrl", "cmd", "shift"}
+local ctrlCmdAll   = {"ctrl", "cmd", "alt", "shift"}
 
 -- Load all screens and sort them from left to right
 
@@ -69,6 +69,10 @@ local goupright = {x=gridW/2, y=0, w=gridW/2, h=gridH/2}
 local godownleft = {x=0, y=gridH/2, w=gridW/2, h=gridH/2}
 local godownright = {x=gridW/2, y=gridH/2, w=gridW/2, h=gridH/2}
 
+local goleftthird = {x=0, y=0, w=gridW/3, h=gridH}
+local gorightthird = {x=2*gridW/3, y=0, w=gridW/3, h=gridH}
+local gocenterthird = {x=gridW/3, y=0, w=gridW/3, h=gridH}
+
 function gridToFrame(screen, grid)
   local screenFrame = screen:frame()
   local cellW = screenFrame.w / gridW
@@ -86,7 +90,10 @@ local movements = {
    {mod=ctrlAlt, key="B", fn=gridset(godownleft)},
    {mod=ctrlAlt, key="N", fn=gridset(godownright)},
    {mod=ctrlAlt, key="Space", fn=gridset(gocenter)},
-   {mod=ctrlAlt, key="M", fn=grid.maximizeWindow}
+   {mod=ctrlAlt, key="M", fn=grid.maximizeWindow},
+   {mod=ctrlCmdAlt, key="H", fn=gridset(goleftthird)},
+   {mod=ctrlCmdAlt, key="Space", fn=gridset(gocenterthird)},
+   {mod=ctrlCmdAlt, key="L", fn=gridset(gorightthird)},
 }
 
 fnutils.each(movements, function(m)
@@ -94,7 +101,7 @@ fnutils.each(movements, function(m)
 end)
 
 -- App control
-hs.hotkey.bind(mash, 'T', function() hs.application.launchOrFocus('/Applications/iTerm.app') end)
+hs.hotkey.bind(ctrlCmd, 'T', function() hs.application.launchOrFocus('/Applications/iTerm.app') end)
 
 -- Layout
 local centerScreen = hs.screen{x=0,y=0}
@@ -118,11 +125,11 @@ local laptopLayout = {
 }
 
 local homeLayout = {
-  {"Google Chrome", nil, leftScreen, hs.layout.left50, nil, nil},
-  {"Emacs", nil, leftScreen, hs.layout.maximized, nil, nil},
-  {"iTerm2", nil, leftScreen, hs.layout.right50, nil, nil},
-  {"Slack", nil, rightScreen, hs.layout.maximized, nil, nil},
-  {"Spotify", nil, rightScreen, hs.layout.maximized, nil, nil},
+  {"Google Chrome", nil, rightScreen, hs.layout.left50, nil, nil},
+  {"Emacs", nil, rightScreen, hs.layout.maximized, nil, nil},
+  {"iTerm2", nil, rightScreen, hs.layout.right50, nil, nil},
+  {"Slack", nil, leftScreen, hs.layout.maximized, nil, nil},
+  {"Spotify", nil, leftScreen, hs.layout.maximized, nil, nil},
 }
 
 -- Screen watcher
@@ -156,7 +163,7 @@ end
 
 local screenWatcher = hs.screen.watcher.new(onScreensChanged):start()
 
-hs.hotkey.bind(mash, "r", function() switchLayout() end)
+hs.hotkey.bind(ctrlCmd, "r", function() switchLayout() end)
 
 -- Inspired by https://github.com/jasoncodes/dotfiles/blob/master/hammerspoon/control_escape.lua
 -- You'll also have to install Karabiner Elements and map caps_lock to left_control there
