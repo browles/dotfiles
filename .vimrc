@@ -8,32 +8,35 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'xolox/vim-misc'
-Plug 'SirVer/ultisnips'
-Plug 'airblade/vim-gitgutter'
-Plug 'browles/vim-sublime-monokai'
-Plug 'dense-analysis/ale'
 Plug 'dmac/vim-cljfmt'
-Plug 'fatih/vim-go'
 Plug 'guns/vim-clojure-highlight'
+Plug 'tpope/vim-fireplace'
+Plug 'fatih/vim-go'
 Plug 'integralist/vim-mypy'
 Plug 'nvie/vim-flake8'
+Plug 'psf/black', {'branch': 'stable'}
+Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
+
+Plug 'sheerun/vim-polyglot'
+Plug 'dense-analysis/ale'
+
+Plug 'browles/vim-sublime-monokai'
+Plug 'mbbill/undotree'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'psf/black', {'branch': 'stable'}
-Plug 'sbdchd/neoformat'
-Plug 'sheerun/vim-polyglot'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fireplace'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'tpope/vim-surround'
 Plug 'xolox/vim-notes'
-Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
+Plug 'xolox/vim-misc'
+
+
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+
 
 call plug#end()
 
@@ -94,16 +97,13 @@ autocmd BufRead *
       \ exec "set path^=".s:tempPath |
       \ exec "set path^=".s:default_path
 
+" Netrw setup
 let g:netrw_banner = 0
-let g:netrw_browse_split = 4
+let g:netrw_browse_split= 0
 let g:netrw_liststyle = 3
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
-" augroup ProjectDrawer
-"   autocmd!
-"   autocmd VimEnter * :Vexplore
-" augroup END
 
 let g:lightline = {
       \ 'colorscheme': 'default',
@@ -135,8 +135,11 @@ inoremap <F5> <esc>:put =strftime('%Y-%m-%d')<CR>i
 nnoremap <SPACE> <Nop>
 let mapleader = " "
 
-nnoremap <leader>f :FZF<CR>
-nnoremap <leader>g :Ag<space>
+nnoremap <leader>pf :FZF<CR>
+nnoremap <leader>pg :Ag<space>
+nnoremap <leader>pe :Ex<CR>
+nnoremap <leader>pr :Rex<CR>
+nnoremap <leader>ut :UndotreeToggle<CR>
 
 " Make Y behave like C and D (yank to end of line).
 nnoremap Y y$
@@ -178,29 +181,6 @@ inoremap ()    ()
 nnoremap p ]p
 nnoremap <c-p> p
 
-" ---------- Autocommands ----------
-
-augroup git_gutter
-  autocmd!
-  autocmd BufWritePost * GitGutter
-augroup end
-
-augroup trailing_whitespace
-  autocmd!
-  " remove whitespace at the end of a line
-  autocmd BufWritePre * :%s/\s\+$//e
-  " remove empty lines at the end of the file
-  autocmd BufWritePre * :%s/\($\n\s*\)\+\%$//e
-augroup end
-
-" additional filetypes
-augroup filetypes
-  autocmd!
-  autocmd BufNewFile,BufRead *.yml set filetype=ansible
-  autocmd BufNewFile,BufRead *.md set filetype=markdown
-  autocmd BufNewFile,BufRead *.tpl set filetype=gotexttmpl
-augroup end
-
 " restore cursor position when reopening a file
 function! ResCur()
   if line("'\"") <= line("$")
@@ -212,6 +192,17 @@ augroup restore_cursor
   autocmd!
   autocmd BufReadPost * call ResCur()
 augroup end
+
+" -- Ale --
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+                  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+                  \ 'python': ['black', 'isort'],
+                  \ 'javascript': ['prettier'],
+                  \ 'css': ['prettier'],
+                  \ }
 
 " -- Go --
 let g:go_fmt_command = 'gopls'
@@ -255,13 +246,6 @@ augroup clojure
 augroup END
 
 " -- Python --
-let g:ale_fixers = {
-                  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-                  \ 'python': ['black', 'isort'],
-                  \ 'javascript': ['prettier'],
-                  \ 'css': ['prettier'],
-                  \ }
-let g:ale_fix_on_save = 1
 hi link pythonImport SublimePink
 
 augroup python
@@ -296,6 +280,7 @@ let g:shfmt_fmt_on_save = 1
 
 " ----------- Misc -------------
 
+" Prints the active syntax highlighting group and color under cursor
 function! SynGroup()
 let l:s = synID(line('.'), col('.'), 1)
 echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')

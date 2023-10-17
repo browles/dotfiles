@@ -1,6 +1,5 @@
 export ZSH=$HOME/.oh-my-zsh
 export GPG_TTY=$(tty)
-export GOPATH="$HOME/go"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
@@ -14,3 +13,4 @@ export FONTCONFIG_PATH="/opt/X11/lib/X11/fontconfig"
 export FZF_DEFAULT_COMMAND="ag -g ''"
 export FZF_CTRL_T_COMMAND="ag -g ''"
 export REPOS=~/src
+export GOPATH="$HOME/go:$REPOS"
