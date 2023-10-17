@@ -1,4 +1,6 @@
 " ---------- Plugins ----------
+"  Must be set before loading ALE
+let g:ale_completion_enabled = 1
 
 if empty(glob('~/.vim/autoload/plug.vim'))
 silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -181,6 +183,9 @@ inoremap ()    ()
 nnoremap p ]p
 nnoremap <c-p> p
 
+" More convenient autocomplete
+inoremap <tab><tab> <C-X><C-o>
+
 " restore cursor position when reopening a file
 function! ResCur()
   if line("'\"") <= line("$")
@@ -194,6 +199,7 @@ augroup restore_cursor
 augroup end
 
 " -- Ale --
+set omnifunc=ale#completion#OmniFunc
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_fix_on_save = 1

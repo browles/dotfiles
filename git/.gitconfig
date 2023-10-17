@@ -1,3 +1,6 @@
+[user]
+	email = rowlesben@gmail.com
+	name = browles
 [core]
   autocrlf = false
   safecrlf = true
