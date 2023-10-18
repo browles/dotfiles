@@ -1,7 +1,4 @@
 " ---------- Plugins ----------
-"  Must be set before loading ALE
-let g:ale_completion_enabled = 1
-
 if empty(glob('~/.vim/autoload/plug.vim'))
 silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
   \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -10,15 +7,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'dmac/vim-cljfmt'
-Plug 'guns/vim-clojure-highlight'
-Plug 'tpope/vim-fireplace'
-Plug 'fatih/vim-go'
-Plug 'integralist/vim-mypy'
-Plug 'nvie/vim-flake8'
-Plug 'psf/black', {'branch': 'stable'}
-Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 
+Plug 'tpope/vim-fireplace'
 Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
 
@@ -50,41 +40,42 @@ colorscheme sublimemonokai
 
 " set colorcolumn=80
 set cursorline
-set autoread                    " reload changed files when focus returns
+set autoread                          " reload changed files when focus returns
 set background=dark
-set backspace=indent,eol,start  " make backspace work correctly
-set clipboard=unnamed           " use the OS clipboard for the unnamed register
+set backspace=indent,eol,start        " make backspace work correctly
+set clipboard=unnamed                 " use the OS clipboard for the unnamed register
 set cmdheight=1
-set completeopt=longest,menuone " popup menu completion options
+set completeopt=longest,menuone,popup " popup menu completion options
+set omnifunc=ale#completion#OmniFunc
 set expandtab
-set foldlevel=99                " open all folds by default
+set foldlevel=99                      " open all folds by default
 set formatoptions=croql
-set hidden                      " allows buffers to be put in bg without saving and allows undo when put in fg
+set hidden                            " allows buffers to be put in bg without saving and allows undo when put in fg
 set history=1000
-set ignorecase                  " ignore case when searching...
-set smartcase                   " infer case sensitivity from search
+set ignorecase                        " ignore case when searching...
+set smartcase                         " infer case sensitivity from search
 set wildignorecase
-set incsearch                   " perform search as you type
-set laststatus=2                " show statusline with filename
-set modeline                    " enable modelines
+set incsearch                         " perform search as you type
+set laststatus=2                      " show statusline with filename
+set modeline                          " enable modelines
 set mouse=a
-set nobackup                    " don't save backup files
+set nobackup                          " don't save backup files
 set nojoinspaces
 set noshowmode
-set noswapfile                  " don't create .swp files
-set nowritebackup               " don't save backup files
-set number                      " show line numbers
-set ruler                       " show cursor position, etc.
-set scrolloff=5                 " scroll when 5 lines away from edge of screen
+set noswapfile                        " don't create .swp files
+set nowritebackup                     " don't save backup files
+set number                            " show line numbers
+set ruler                             " show cursor position, etc.
+set scrolloff=5                       " scroll when 5 lines away from edge of screen
 set shiftwidth=2
-set showcmd                     " display commands in progress at the bottom
-set smartcase                   " ...unless a capital letter was typed
+set showcmd                           " display commands in progress at the bottom
+set smartcase                         " ...unless a capital letter was typed
 set smarttab
 set tabstop=2
 set termguicolors
-set textwidth=80                " wrap comments
-set wildmenu                    " command tab completion menu
-set wildmode=list:longest,full  " command tab completion menu options
+set textwidth=80                      " wrap comments
+set wildmenu                          " command tab completion menu
+set wildmode=list:longest,full        " command tab completion menu options
 
 " Improvement to autochdir
 " https://vim.fandom.com/wiki/Set_working_directory_to_the_current_file
@@ -98,6 +89,18 @@ autocmd BufRead *
       \ exec "set path-=".s:default_path |
       \ exec "set path^=".s:tempPath |
       \ exec "set path^=".s:default_path
+
+" Restore cursor position when reopening a file
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+augroup restore_cursor
+  autocmd!
+  autocmd BufReadPost * call ResCur()
+augroup end
 
 " Netrw setup
 let g:netrw_banner = 0
@@ -141,7 +144,7 @@ nnoremap <leader>pf :FZF<CR>
 nnoremap <leader>pg :Ag<space>
 nnoremap <leader>pe :Ex<CR>
 nnoremap <leader>pr :Rex<CR>
-nnoremap <leader>ut :UndotreeToggle<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
 
 " Make Y behave like C and D (yank to end of line).
 nnoremap Y y$
@@ -184,35 +187,39 @@ nnoremap p ]p
 nnoremap <c-p> p
 
 " More convenient autocomplete
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <tab><tab> <C-X><C-o>
 
-" restore cursor position when reopening a file
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-augroup restore_cursor
-  autocmd!
-  autocmd BufReadPost * call ResCur()
-augroup end
+" ALE
+nnoremap gd :ALEGoToDefinition<CR>
+nnoremap gr :ALEFindReferences<CR>
+nnoremap K :ALEHover<CR>
+nnoremap <leader>aj :ALENext<CR>
+nnoremap <leader>ak :ALEPrevios<CR>
+nnoremap <leader>ar :ALERename<CR>
+nnoremap <leader>ac :ALECodeAction<CR>
+vnoremap <leader>ac :ALECodeAction<CR>
 
-" -- Ale --
-set omnifunc=ale#completion#OmniFunc
+" -- ALE --
+let g:ale_completion_enabled = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_fix_on_save = 1
+let g:ale_linters = {
+                  \ 'go': ['gopls'],
+                  \ 'python': ['pylsp'],
+                  \ 'sh': ['shellcheck'],
+                  \ }
 let g:ale_fixers = {
                   \ '*': ['remove_trailing_lines', 'trim_whitespace'],
                   \ 'python': ['black', 'isort'],
-                  \ 'javascript': ['prettier'],
+                  \ 'javascript': ['prettier', 'eslint'],
+                  \ 'typescript': ['prettier', 'eslint'],
                   \ 'css': ['prettier'],
+                  \ 'json': ['prettier'],
+                  \ 'sh': ['shfmt'],
                   \ }
-
 " -- Go --
-let g:go_fmt_command = 'gopls'
-let g:go_gopls_gofumpt = 1
 let g:go_highlight_format_strings = 1
 let g:go_highlight_function_arguments = 1
 let g:go_highlight_function_calls = 1
@@ -231,15 +238,9 @@ augroup go
   autocmd FileType go setlocal tabstop=2
   autocmd FileType go setlocal softtabstop=2
   autocmd FileType go setlocal shiftwidth=2
-  autocmd FileType go nnoremap <buffer> gr :GoReferrers<CR>:lopen<CR>
-  autocmd FileType go nnoremap <buffer> gc :GoCallers<CR>:lopen<CR>
 augroup END
 
 " -- Clojure --
-let g:cljfmt_on_save = 0
-let g:clojure_syntax_keywords = {
-                  \ 'clojureMacro': ['def-', '-?>', '-?>>'],
-                  \ }
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 
 hi link clojureKeyword Special
@@ -281,8 +282,6 @@ augroup END
 
 let g:vim_jsx_pretty_colorful_config = 1
 
-" -- Bash --
-let g:shfmt_fmt_on_save = 1
 
 " ----------- Misc -------------
 
