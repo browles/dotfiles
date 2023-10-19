@@ -109,7 +109,6 @@ let g:netrw_liststyle = 3
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
-
 let g:lightline = {
       \ 'colorscheme': 'default',
       \ 'active': {
@@ -121,9 +120,6 @@ let g:lightline = {
       \ },
       \ }
 
-let g:notes_directories = ['~/Dropbox/notes']
-let g:notes_smart_quotes = 0
-
 " Viminfo saves/restores editing metadata in ~/.viminfo.
 " '100   Save marks for the last 100 edited files
 " f1     Store global marks
@@ -133,8 +129,19 @@ let g:notes_smart_quotes = 0
 " h      Disable hlsearch when starting
 set viminfo='100,f1,<500,:100,/100,h
 
+" vim-notes
+let g:notes_directories = ['~/Dropbox/notes']
+let g:notes_smart_quotes = 0
+
 " ---------- Mappings ----------
 inoremap <F5> <esc>:put =strftime('%Y-%m-%d')<CR>i
+
+" Prints the active syntax highlighting group and color under cursor
+function! SynGroup()
+  let l:s = synID(line('.'), col('.'), 1)
+  echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+map <F10> :call SynGroup()<CR>
 
 " Use space as leader
 nnoremap <SPACE> <Nop>
@@ -188,14 +195,14 @@ nnoremap <c-p> p
 
 " More convenient autocomplete
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <tab><tab> <C-X><C-o>
+inoremap <C-j> <C-x><C-o>
 
 " ALE
 nnoremap gd :ALEGoToDefinition<CR>
 nnoremap gr :ALEFindReferences<CR>
 nnoremap K :ALEHover<CR>
 nnoremap <leader>aj :ALENext<CR>
-nnoremap <leader>ak :ALEPrevios<CR>
+nnoremap <leader>ak :ALEPrevious<CR>
 nnoremap <leader>ar :ALERename<CR>
 nnoremap <leader>ac :ALECodeAction<CR>
 vnoremap <leader>ac :ALECodeAction<CR>
@@ -203,22 +210,44 @@ vnoremap <leader>ac :ALECodeAction<CR>
 " -- ALE --
 let g:ale_completion_enabled = 1
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_insert_leave = 1
 let g:ale_fix_on_save = 1
 let g:ale_linters = {
-                  \ 'go': ['gopls'],
-                  \ 'python': ['pylsp'],
-                  \ 'sh': ['shellcheck'],
-                  \ }
+      \ 'go': ['gopls'],
+      \ 'python': ['flake8', 'mypy', 'pylsp'],
+      \ 'sh': ['shellcheck'],
+      \ }
 let g:ale_fixers = {
-                  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-                  \ 'python': ['black', 'isort'],
-                  \ 'javascript': ['prettier', 'eslint'],
-                  \ 'typescript': ['prettier', 'eslint'],
-                  \ 'css': ['prettier'],
-                  \ 'json': ['prettier'],
-                  \ 'sh': ['shfmt'],
-                  \ }
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'python': ['black', 'isort'],
+      \ 'javascript': ['prettier', 'eslint'],
+      \ 'typescript': ['prettier', 'eslint'],
+      \ 'css': ['prettier'],
+      \ 'json': ['prettier'],
+      \ 'sh': ['shfmt'],
+      \ }
+let g:ale_python_pylsp_config = {
+      \   'pylsp': {
+      \     'plugins': {
+      \       'pycodestyle': {
+      \         'enabled': v:false,
+      \       },
+      \       'pyflakes': {
+      \         'enabled': v:false,
+      \       },
+      \       'pydocstyle': {
+      \         'enabled': v:false,
+      \       },
+      \       'autopep8': {
+      \         'enabled': v:false,
+      \       },
+      \       'yapf': {
+      \         'enabled': v:false,
+      \       },
+      \     },
+      \   },
+      \}
+
 " -- Go --
 let g:go_highlight_format_strings = 1
 let g:go_highlight_function_arguments = 1
@@ -273,21 +302,11 @@ augroup java
 augroup END
 
 " -- JavaScript --
+let g:vim_jsx_pretty_colorful_config = 1
+
 augroup javascript
   autocmd!
   autocmd FileType javascript setlocal tabstop=2
   autocmd FileType javascript setlocal softtabstop=2
   autocmd FileType javascript setlocal shiftwidth=2
 augroup END
-
-let g:vim_jsx_pretty_colorful_config = 1
-
-
-" ----------- Misc -------------
-
-" Prints the active syntax highlighting group and color under cursor
-function! SynGroup()
-let l:s = synID(line('.'), col('.'), 1)
-echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
-map <F10> :call SynGroup()<CR>
