@@ -15,4 +15,5 @@ export PATH="$PATH:/usr/local/bin"
 export FONTCONFIG_PATH="/opt/X11/lib/X11/fontconfig"
 export FZF_DEFAULT_COMMAND="ag -g ''"
 export FZF_CTRL_T_COMMAND="ag -g ''"
-export GOPATH="$HOME/go:$REPOS"
+export GOPATH="$HOME/go:`dirname $REPOS`"
+

@@ -5,6 +5,7 @@
   autocrlf = false
   safecrlf = true
   editor = vim
+  excludesFile = ~/.gitignore
 [alias]
   co = checkout
   ci = commit
