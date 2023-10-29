@@ -1,9 +1,11 @@
 node_modules/
 vendor/
 .git/
+.DS_Store
 *.log
 *.ipynb
 *.b64
 *pb2.py
 yarn.lock
+.yarn-cache
 requirements.lock
