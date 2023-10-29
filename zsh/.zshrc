@@ -4,9 +4,10 @@ type google-chrome &>/dev/null && alias chrome=google-chrome
 alias python=python3
 alias pip=pip3
 alias vim=nvim
+alias v=vim
 alias vimf='vim `fzf`'
 alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
-alias zshrc='vim ~/.zshrc'
+alias zshrc='vim --cmd "cd ~" ~/.zshrc'
 alias src='source ~/.zshenv && source ~/.zshrc'
 alias ls="gls --color"
 alias g="git status"
@@ -22,7 +23,7 @@ bindkey -e
 # Smart case-sensitive completions
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# Git status in prompt
+# Prompt
 autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' formats '%b%u%c '
 zstyle ':vcs_info:git*' actionformats '%F{14}⏱ %*%f'
@@ -30,11 +31,8 @@ zstyle ':vcs_info:git*' unstagedstr '*'
 zstyle ':vcs_info:git*' stagedstr '+'
 zstyle ':vcs_info:*:*' check-for-changes true
 precmd() { vcs_info; }
-
-# Prompt
 setopt PROMPT_SUBST
 PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f$ '
-
 # LS colors
 eval "$(gdircolors ~/.dircolors)"
 
