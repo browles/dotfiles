@@ -3,7 +3,6 @@ alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 type google-chrome &>/dev/null && alias chrome=google-chrome
 alias python=python3
 alias pip=pip3
-alias vim=nvim
 alias v=vim
 alias vimf='vim `fzf`'
 alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
