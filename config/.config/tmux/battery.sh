@@ -25,5 +25,10 @@ elif [[ "$percent" -gt 15 ]]; then
 else
   icon="󰁺"
 fi
+if [[ "$charging" =~ .*"charging" ]]; then
+  charging=" ($charging)"
+else
+  charging=""
+fi
 
-echo "$icon" "$percent"% "($charging)"
+echo "$icon" "$percent%$charging"
