@@ -5,6 +5,7 @@ alias python=python3
 alias pip=pip3
 alias v=vim
 alias vimf='vim `fzf`'
+alias vimdiff='vim -d'
 alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
 alias zshrc='vim --cmd "cd ~" ~/.zshrc'
 alias src='source ~/.zshenv && source ~/.zshrc'
