@@ -25,8 +25,8 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 # Prompt
 autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' formats '%b%u%c '
-zstyle ':vcs_info:git*' actionformats '%F{14}⏱ %*%f'
+zstyle ':vcs_info:git:*' formats '(%b)%u%c '
+zstyle ':vcs_info:git*' actionformats '(%a|%b)%u%c '
 zstyle ':vcs_info:git*' unstagedstr '*'
 zstyle ':vcs_info:git*' stagedstr '+'
 zstyle ':vcs_info:*:*' check-for-changes true
