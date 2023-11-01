@@ -1,9 +1,9 @@
 #!/bin/bash
-set -eu -o pipefail
+set -u -o pipefail
 
 battery=$(pmset -g batt)
-percent=$(echo "$battery" | grep -Eo "[0-9]+%" | rev | cut -c2- | rev)
-charging=$(echo "$battery" | grep -Eo "not charging|charging|finishing charge|charged")
+percent=$(echo "$battery" | grep -Po "[0-9]+(?=%)")
+charging=$(echo "$battery" | grep -Po 'not charging|(?<!dis)charging')
 if [[ "$percent" -gt 95 ]]; then
   icon=󰁹
 elif [[ "$percent" -gt 85 ]]; then

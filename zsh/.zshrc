@@ -9,8 +9,9 @@ alias vimdiff='vim -d'
 alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
 alias zshrc='vim --cmd "cd ~" ~/.zshrc'
 alias src='source ~/.zshenv && source ~/.zshrc'
-alias ls="gls --color"
-alias g="git status"
+alias ls="ls --color"
+alias g="git"
+alias gs="git status"
 alias ga="git add"
 alias gc="git commit"
 alias gco="git checkout"
@@ -38,7 +39,6 @@ eval "$(gdircolors ~/.dircolors)"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(rbenv init -)"
-eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
