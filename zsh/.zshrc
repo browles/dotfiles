@@ -4,11 +4,12 @@ type google-chrome &>/dev/null && alias chrome=google-chrome
 alias python=python3
 alias pip=pip3
 alias v=vim
-alias vimf='vim `fzf`'
+alias vimf='fzf --bind "enter:become(vim {})"'
 alias vimdiff='vim -d'
 alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
 alias zshrc='vim --cmd "cd ~" ~/.zshrc'
 alias src='source ~/.zshenv && source ~/.zshrc'
+alias fzf='fzf --reverse --preview="bat --color=always {} --style=numbers"'
 alias ls="ls --color"
 alias g="git"
 alias gs="git status"
