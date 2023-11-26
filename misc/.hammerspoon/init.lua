@@ -73,6 +73,9 @@ local goleftthird = {x=0, y=0, w=gridW/3, h=gridH}
 local gorightthird = {x=2*gridW/3, y=0, w=gridW/3, h=gridH}
 local gocenterthird = {x=gridW/3, y=0, w=gridW/3, h=gridH}
 
+local golefttwothird = {x=0, y=0, w=2*gridW/3, h=gridH}
+local gorighttwothird = {x=gridW/3, y=0, w=2*gridW/3, h=gridH}
+
 function gridToFrame(screen, grid)
   local screenFrame = screen:frame()
   local cellW = screenFrame.w / gridW
@@ -94,6 +97,8 @@ local movements = {
    {mod=ctrlCmdAlt, key="H", fn=gridset(goleftthird)},
    {mod=ctrlCmdAlt, key="Space", fn=gridset(gocenterthird)},
    {mod=ctrlCmdAlt, key="L", fn=gridset(gorightthird)},
+   {mod=ctrlCmd, key="H", fn=gridset(golefttwothird)},
+   {mod=ctrlCmd, key="L", fn=gridset(gorighttwothird)},
 }
 
 fnutils.each(movements, function(m)
