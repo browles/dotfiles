@@ -1,216 +1,116 @@
--- Load extensions
-local fnutils = require "hs.fnutils"
-local grid = require "hs.grid"
-local hotkey = require "hs.hotkey"
-local screen = require "hs.screen"
-local window = require "hs.window"
-local layout = require "hs.layout"
+local grid   = require("hs.grid")
+local hotkey = require("hs.hotkey")
+local window = require("hs.window")
 
-local log = hs.logger.new("init", "debug")
-
+hs.loadSpoon("ControlEscape"):start()
 hs.crash.crashLogToNSLog = true
-
 window.animationDuration = 0
 
-local ctrlAlt      = {"ctrl", "alt"}
-local ctrlCmd      = {"ctrl", "cmd"}
-local ctrlCmdAlt   = {"ctrl", "cmd", "alt"}
-local ctrlCmdShift = {"ctrl", "cmd", "shift"}
-local ctrlCmdAll   = {"ctrl", "cmd", "alt", "shift"}
-
--- Load all screens and sort them from left to right
-
-local getSortedScreens = function()
-  local screens = hs.screen.allScreens()
-  table.sort(screens, function(screen1, screen2)
-    x1, y1 = screen1:position()
-    x2, y2 = screen2:position()
-    return x1 < x2
-  end)
-
-  for i, s in ipairs(screens) do
-    log.d(i)
-  end
-
-  return screens
-end
-
--- Window movements
-
-local gridset = function(frame)
-   return function()
-      local win = window.focusedWindow()
-      if win then
-         grid.set(win, frame, win:screen())
-      else
-         alert.show("No focused window.")
-      end
-   end
-end
-
--- Set up grid
-
-local gridW = 6
-local gridH = 8
+-- Window movement
+local gridW              = 6
+local gridH              = 8
 
 grid.setGrid(hs.geometry.size(gridW, gridH))
-   .setMargins(hs.geometry.point(0, 0))
+    .setMargins(hs.geometry.point(0, 0))
 
--- Move windows to discrete positions
+local goleft = { x = 0, y = 0, w = gridW / 2, h = gridH }
+local goright = { x = gridW / 2, y = 0, w = gridW / 2, h = gridH }
+local gotop = { x = 0, y = 0, w = gridW, h = gridH / 2 }
+local gobottom = { x = 0, y = gridH / 2, w = gridW, h = gridH / 2 }
+local gocenter = { x = 1, y = 0, w = 4, h = gridH }
 
-local goleft = {x=0, y=0, w=gridW/2, h=gridH}
-local goright = {x=gridW/2, y=0, w=gridW/2, h=gridH}
-local gotop = {x=0, y=0, w=gridW, h=gridH/2}
-local gobottom = {x=0, y=gridH/2, w=gridW, h=gridH/2}
-local gocenter = {x=1, y=0, w=4, h=gridH}
+local goupleft = { x = 0, y = 0, w = gridW / 2, h = gridH / 2 }
+local goupright = { x = gridW / 2, y = 0, w = gridW / 2, h = gridH / 2 }
+local godownleft = { x = 0, y = gridH / 2, w = gridW / 2, h = gridH / 2 }
+local godownright = { x = gridW / 2, y = gridH / 2, w = gridW / 2, h = gridH / 2 }
 
-local goupleft = {x=0, y=0, w=gridW/2, h=gridH/2}
-local goupright = {x=gridW/2, y=0, w=gridW/2, h=gridH/2}
-local godownleft = {x=0, y=gridH/2, w=gridW/2, h=gridH/2}
-local godownright = {x=gridW/2, y=gridH/2, w=gridW/2, h=gridH/2}
+local goleftthird = { x = 0, y = 0, w = gridW / 3, h = gridH }
+local gorightthird = { x = 2 * gridW / 3, y = 0, w = gridW / 3, h = gridH }
+local gocenterthird = { x = gridW / 3, y = 0, w = gridW / 3, h = gridH }
 
-local goleftthird = {x=0, y=0, w=gridW/3, h=gridH}
-local gorightthird = {x=2*gridW/3, y=0, w=gridW/3, h=gridH}
-local gocenterthird = {x=gridW/3, y=0, w=gridW/3, h=gridH}
+local golefttwothird = { x = 0, y = 0, w = 2 * gridW / 3, h = gridH }
+local gorighttwothird = { x = gridW / 3, y = 0, w = 2 * gridW / 3, h = gridH }
 
-local golefttwothird = {x=0, y=0, w=2*gridW/3, h=gridH}
-local gorighttwothird = {x=gridW/3, y=0, w=2*gridW/3, h=gridH}
-
-function gridToFrame(screen, grid)
-  local screenFrame = screen:frame()
-  local cellW = screenFrame.w / gridW
-  local cellH = screenFrame.h / gridH
-  return hs.geometry.rect(cellW * grid.x, cellH * grid.y, cellW * grid.w, cellH * grid.h)
+local gridset = function(frame)
+  return function()
+    local win = window.focusedWindow()
+    if win then
+      grid.set(win, frame, win:screen())
+    else
+      alert.show("No focused window.")
+    end
+  end
 end
 
-local movements = {
-   {mod=ctrlAlt, key="H", fn=gridset(goleft)},
-   {mod=ctrlAlt, key="K", fn=gridset(gotop)},
-   {mod=ctrlAlt, key="J", fn=gridset(gobottom)},
-   {mod=ctrlAlt, key="L", fn=gridset(goright)},
-   {mod=ctrlAlt, key="Y", fn=gridset(goupleft)},
-   {mod=ctrlAlt, key="U", fn=gridset(goupright)},
-   {mod=ctrlAlt, key="B", fn=gridset(godownleft)},
-   {mod=ctrlAlt, key="N", fn=gridset(godownright)},
-   {mod=ctrlAlt, key="Space", fn=gridset(gocenter)},
-   {mod=ctrlAlt, key="M", fn=grid.maximizeWindow},
-   {mod=ctrlCmdAlt, key="H", fn=gridset(goleftthird)},
-   {mod=ctrlCmdAlt, key="Space", fn=gridset(gocenterthird)},
-   {mod=ctrlCmdAlt, key="L", fn=gridset(gorightthird)},
-   {mod=ctrlCmd, key="H", fn=gridset(golefttwothird)},
-   {mod=ctrlCmd, key="L", fn=gridset(gorighttwothird)},
+-- Window layouts
+local centerScreen = hs.screen({ x = 0, y = 0 })
+local rightScreen = hs.screen({ x = 1, y = 0 })
+local leftScreen = hs.screen({ x = -1, y = 0 })
+
+local oneScreenLayout = {
+  { "Google Chrome", nil, centerScreen, hs.layout.maximized, nil, nil },
+  { "iTerm2", nil, centerScreen, hs.layout.right50, nil, nil },
+  { "Slack", nil, centerScreen, hs.layout.maximized, nil, nil },
+  { "Spotify", nil, centerScreen, hs.layout.maximized, nil, nil },
 }
 
-fnutils.each(movements, function(m)
-  hotkey.bind(m.mod, m.key, m.fn)
-end)
-
--- App control
-hs.hotkey.bind(ctrlCmd, 'T', function() hs.application.launchOrFocus('/Applications/iTerm.app') end)
-
--- Layout
-local centerScreen = hs.screen{x=0,y=0}
-local rightScreen = hs.screen{x=1,y=0}
-local leftScreen = hs.screen{x=-1,y=0}
-
-local workLayout = {
-  {"Google Chrome", nil, leftScreen, hs.layout.left50, nil, nil},
-  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
-  {"iTerm2", nil, leftScreen, hs.layout.right50, nil, nil},
-  {"Slack", nil, rightScreen, hs.layout.maximized, nil, nil},
-  {"Spotify", nil, rightScreen, hs.layout.maximized, nil, nil},
+local twoScreenLayout = {
+  { "Google Chrome", nil, rightScreen, hs.layout.left50, nil, nil },
+  { "iTerm2", nil, rightScreen, hs.layout.right50, nil, nil },
+  { "Slack", nil, leftScreen, hs.layout.maximized, nil, nil },
+  { "Spotify", nil, leftScreen, hs.layout.maximized, nil, nil },
 }
-
-local laptopLayout = {
-  {"Google Chrome", nil, centerScreen, hs.layout.maximized, nil, nil},
-  {"Emacs", nil, centerScreen, hs.layout.maximized, nil, nil},
-  {"iTerm2", nil, centerScreen, hs.layout.right50, nil, nil},
-  {"Slack", nil, centerScreen, hs.layout.maximized, nil, nil},
-  {"Spotify", nil, centerScreen, hs.layout.maximized, nil, nil},
-}
-
-local homeLayout = {
-  {"Google Chrome", nil, rightScreen, hs.layout.left50, nil, nil},
-  {"Emacs", nil, rightScreen, hs.layout.maximized, nil, nil},
-  {"iTerm2", nil, rightScreen, hs.layout.right50, nil, nil},
-  {"Slack", nil, leftScreen, hs.layout.maximized, nil, nil},
-  {"Spotify", nil, leftScreen, hs.layout.maximized, nil, nil},
-}
-
--- Screen watcher
-local lastNumberOfScreens = #hs.screen.allScreens()
 
 function switchLayout()
   local numScreens = #hs.screen.allScreens()
   local layout = {}
-
+  local layoutName = ""
   if numScreens == 1 then
-    layout = laptopLayout
-    layoutName = "Laptop layout"
-  elseif numScreens == 2 then
-    layout = homeLayout
-    layoutName = "Home layout"
-  elseif numScreens == 3 then
-    layout = workLayout
-    layoutName = "Work layout"
+    layout = oneScreenLayout
+    layoutName = "One Screen Layout"
+  else
+    layout = twoScreenLayout
+    layoutName = "Multi Screen Layout"
   end
   hs.layout.apply(layout)
   hs.alert.show(layoutName)
 end
 
-function onScreensChanged()
-  numScreens = #hs.screen.allScreens()
-  if lastNumberOfScreens ~= numScreens then
-    switchLayout()
-    lastNumberOfScreens = numScreens
+-- App control
+local function launchOrFocus(app)
+  return function()
+    hs.application.launchOrFocus(app)
   end
 end
 
-local screenWatcher = hs.screen.watcher.new(onScreensChanged):start()
+-- Keybinds
+local ctrlAlt      = { "ctrl", "alt" }
+local ctrlCmd      = { "ctrl", "cmd" }
+local ctrlShiftAlt = { "ctrl", "shift", "alt" }
+local ctrlCmdAlt   = { "ctrl", "cmd", "alt" }
+local ctrlCmdShift = { "ctrl", "cmd", "shift" }
+local ctrlCmdAll   = { "ctrl", "cmd", "alt", "shift" }
 
-hs.hotkey.bind(ctrlCmd, "r", function() switchLayout() end)
+local keybinds     = {
+  { mod = ctrlAlt, key = "H", fn = gridset(goleft) },
+  { mod = ctrlAlt, key = "K", fn = gridset(gotop) },
+  { mod = ctrlAlt, key = "J", fn = gridset(gobottom) },
+  { mod = ctrlAlt, key = "L", fn = gridset(goright) },
+  { mod = ctrlAlt, key = "Y", fn = gridset(goupleft) },
+  { mod = ctrlAlt, key = "U", fn = gridset(goupright) },
+  { mod = ctrlAlt, key = "B", fn = gridset(godownleft) },
+  { mod = ctrlAlt, key = "N", fn = gridset(godownright) },
+  { mod = ctrlAlt, key = "Space", fn = gridset(gocenter) },
+  { mod = ctrlAlt, key = "M", fn = grid.maximizeWindow },
+  { mod = ctrlCmdAlt, key = "H", fn = gridset(goleftthird) },
+  { mod = ctrlCmdAlt, key = "Space", fn = gridset(gocenterthird) },
+  { mod = ctrlCmdAlt, key = "L", fn = gridset(gorightthird) },
+  { mod = ctrlShiftAlt, key = "H", fn = gridset(golefttwothird) },
+  { mod = ctrlShiftAlt, key = "L", fn = gridset(gorighttwothird) },
+  { mod = ctrlCmd, key = 'T', fn = launchOrFocus("iTerm2") },
+  { mod = ctrlCmd, key = "R", fn = switchLayout },
+}
 
--- Inspired by https://github.com/jasoncodes/dotfiles/blob/master/hammerspoon/control_escape.lua
--- You'll also have to install Karabiner Elements and map caps_lock to left_control there
-len = function(t)
-    local length = 0
-    for k, v in pairs(t) do
-    	length = length + 1
-    end
-    return length
+for _, bind in ipairs(keybinds) do
+  hotkey.bind(bind.mod, bind.key, bind.fn)
 end
-
-
-send_escape = false
-prev_modifiers = {}
-
-modifier_handler = function(evt)
-    -- evt:getFlags() holds the modifiers that are currently held down
-    local curr_modifiers = evt:getFlags()
-
-    if curr_modifiers["ctrl"] and len(curr_modifiers) == 1 and len(prev_modifiers) == 0 then
-        -- We need this here because we might have had additional modifiers, which
-        -- we don't want to lead to an escape, e.g. [Ctrl + Cmd] —> [Ctrl] —> [ ]
-        send_escape = true
-    elseif prev_modifiers["ctrl"]  and len(curr_modifiers) == 0 and send_escape then
-		send_escape = false
-        hs.eventtap.keyStroke({}, "ESCAPE")
-    else
-        send_escape = false
-	end
-    prev_modifiers = curr_modifiers
-	return false
-end
-
-
--- Call the modifier_handler function anytime a modifier key is pressed or released
-modifier_tap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, modifier_handler)
-modifier_tap:start()
-
-
--- If any non-modifier key is pressed, we know we won't be sending an escape
-non_modifier_tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
-    send_escape = false
-	return false
-end)
-non_modifier_tap:start()
