@@ -37,7 +37,7 @@ local gridset = function(frame)
     if win then
       grid.set(win, frame, win:screen())
     else
-      alert.show("No focused window.")
+      hs.alert.show("No focused window.")
     end
   end
 end
@@ -61,7 +61,7 @@ local twoScreenLayout = {
   { "Spotify", nil, leftScreen, hs.layout.maximized, nil, nil },
 }
 
-function switchLayout()
+local function switchLayout()
   local numScreens = #hs.screen.allScreens()
   local layout = {}
   local layoutName = ""
