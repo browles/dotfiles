@@ -32,6 +32,14 @@ zstyle ':vcs_info:git*' actionformats '(%a|%b)%u%c '
 zstyle ':vcs_info:git*' unstagedstr '*'
 zstyle ':vcs_info:git*' stagedstr '+'
 zstyle ':vcs_info:*:*' check-for-changes true
+# https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+function +vi-git-untracked(){
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+        git status --porcelain | grep -q '^?? ' 2> /dev/null ; then
+        hook_com[staged]+='&'
+    fi
+}
 precmd() { vcs_info; }
 setopt PROMPT_SUBST
 PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f$ '
