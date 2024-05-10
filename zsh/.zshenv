@@ -1,8 +1,8 @@
 export EDITOR=vim
 export GPG_TTY=$(tty)
 export PYENV_ROOT="$HOME/.pyenv"
-export REPOS=~/src
-export GOPATH="$HOME/go"
+export REPOS="$HOME/src"
+export GOPATH="$HOME/go:$(dirname $REPOS)"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
