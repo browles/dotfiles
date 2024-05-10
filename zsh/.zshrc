@@ -17,8 +17,8 @@ alias ga="git add"
 alias gc="git commit"
 alias gco="git checkout"
 alias ..="cd .."
-alias ...="cd ..."
-alias ....="cd ...."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 
 # Emacs style keybinds
 bindkey -e
