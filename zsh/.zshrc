@@ -46,10 +46,6 @@ PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f$ '
 # LS colors
 eval "$(gdircolors ~/.dircolors)"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(rbenv init -)"
-eval "$(pyenv init -)"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+source ~/.fzf.zsh
+source /opt/homebrew/etc/profile.d/autojump.sh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
