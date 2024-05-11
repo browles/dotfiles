@@ -1,5 +1,4 @@
 export EDITOR=vim
-export PAGER=less
 export GPG_TTY=$(tty)
 export PYENV_ROOT="$HOME/.pyenv"
 export REPOS="$HOME/src"
