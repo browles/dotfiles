@@ -10,7 +10,7 @@ alias vimrc='vim --cmd "cd ~/.config/nvim" ~/.config/nvim/init.lua'
 alias zshrc='vim --cmd "cd ~" ~/.zshrc'
 alias src='source ~/.zshenv && source ~/.zshrc'
 alias fzf='fzf --reverse --preview="bat --color=always {} --style=numbers"'
-alias ls="ls --color"
+alias ls="ls --color=auto"
 alias g="git"
 alias gs="git status"
 alias ga="git add"
@@ -43,9 +43,20 @@ function +vi-git-untracked(){
 precmd() { vcs_info; }
 setopt PROMPT_SUBST
 PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f$ '
-# LS colors
-eval "$(gdircolors ~/.dircolors)"
 
-source ~/.fzf.zsh
-source /opt/homebrew/etc/profile.d/autojump.sh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+eval "$(dircolors ~/.dircolors)"
+UNAME=$(uname)
+if [[ "$UNAME" == "Darwin" ]]; then
+  source /opt/homebrew/opt/fzf/shell/completion.zsh
+  source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+	source /opt/homebrew/share/autojump/autojump.zsh
+	source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ "$UNAME" == "Linux" ]]; then
+  source /usr/share/doc/fzf/examples/completion.zsh
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+	source /usr/share/autojump/autojump.zsh
+	source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# Fix FZF's Alt-C handling on a Mac keyboard
+bindkey "ç" fzf-cd-widget
