@@ -7,7 +7,7 @@ apt install zsh zsh-syntax-highlighting
 
 apt install curl wget parallel lsb-release gpg
 
-apt install fzf ripgrep fd-find tree autojump htop jq
+apt install fzf ripgrep fd-find tree autojump htop jq bat
 
 apt install tmux
 

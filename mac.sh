@@ -7,7 +7,7 @@ brew install zsh zsh-syntax-highlighting readline
 
 brew install coreutils findutils grep gnu-sed gnu-tar watch curl wget parallel
 
-brew install fzf ripgrep fd tree autojump htop glow jq
+brew install fzf ripgrep fd tree autojump htop glow jq bat
 
 brew install tmux tmux-mem-cpu-load
 
