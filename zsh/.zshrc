@@ -42,7 +42,8 @@ function +vi-git-untracked(){
 }
 precmd() { vcs_info; }
 setopt PROMPT_SUBST
-PROMPT='%F{magenta}%n@%m%f %F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f$ '
+[[ $SSH_CONNECTION ]] && userhost="%F{blue}%n@%m %f"
+PROMPT='${userhost}%F{cyan}%~ %f%F{red}${vcs_info_msg_0_}%f$ '
 
 eval "$(dircolors ~/.dircolors)"
 UNAME=$(uname)
