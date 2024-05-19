@@ -13,11 +13,12 @@ apt install tmux
 
 apt install neovim git-delta
 
-apt install golang-go nodejs npm rbenv rustc
+apt install golang-go nodejs npm rbenv python3-pip python3-venv
 
 apt install sqlite3 postgresql
 snap install redis
 
+curl https://sh.rustup.rs -sSf | sh
 curl https://pyenv.run | bash
 
 go install github.com/charmbracelet/glow@latest

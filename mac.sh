@@ -13,11 +13,14 @@ brew install tmux tmux-mem-cpu-load
 
 brew install neovim lazygit git-delta
 
-brew install pyenv python rbenv ruby yarn node go rust
+brew install pyenv python rbenv ruby yarn node go
 
 brew install sqlite redis postgresql@14
 
 brew services start postgresql@14
+brew services start redis
+
+curl https://sh.rustup.rs -sSf | sh
 
 find -L /opt/homebrew/opt -path '/opt/homebrew/opt/*/gnubin/*' -exec \
   sh -c 'ln -is {} /usr/local/bin/$(basename {})' \;
