@@ -1,3 +1,4 @@
+export TERM="screen-256color"
 export EDITOR=vim
 export GPG_TTY=$(tty)
 export PYENV_ROOT="$HOME/.pyenv"

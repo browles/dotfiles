@@ -5,7 +5,7 @@ apt install stow
 
 apt install zsh zsh-syntax-highlighting
 
-apt install curl wget parallel lsb-release gpg
+apt install curl wget parallel lsb-release gpg make cmake
 
 apt install fzf ripgrep fd-find tree autojump htop jq bat
 
@@ -26,3 +26,4 @@ go install github.com/charmbracelet/glow@latest
 mkdir -p $HOME/bin
 ln -s `which nvim` $HOME/bin/nvim
 ln -s `which fdfind` $HOME/bin/fd
+ln -s `which batcat` $HOME/bin/bat
