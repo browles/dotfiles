@@ -16,5 +16,4 @@ path=($GOPATH/bin $path)
 path=($PYENV_ROOT/bin $path)
 path=($HOME/.cargo/bin $path)
 path=($HOME/bin $path)
-export GOPATH="$GOPATH:$(dirname $REPOS)"
 export PATH
