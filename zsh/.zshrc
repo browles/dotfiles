@@ -1,3 +1,5 @@
+setopt share_history
+
 alias ag="ag --path-to-ignore ~/.ignore"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 type google-chrome &>/dev/null && alias chrome=google-chrome
