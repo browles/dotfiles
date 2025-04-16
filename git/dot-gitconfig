@@ -43,3 +43,5 @@
     colorMoved = default
     tool = vimdiff
     prompt = false
+[init]
+	defaultBranch = main
