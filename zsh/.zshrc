@@ -3,6 +3,7 @@ setopt share_history
 alias ag="ag --path-to-ignore ~/.ignore"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 type google-chrome &>/dev/null && alias chrome=google-chrome
+alias vlc="/Applications/VLC.app/Contents/MacOS/VLC"
 alias python=python3
 alias pip=pip3
 alias v=vim
